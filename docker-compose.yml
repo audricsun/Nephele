@@ -1,0 +1,19 @@
+services:
+  db:
+    image: registry.dev.lingjuninvest.org/library/mysql:8.0.40-bookworm
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: test-db
+    ports:
+      - 3306:3306
+    volumes:
+      - ./.docker/mysql:/var/lib/mysql
+
+  broker:
+    image: arm64v8/rabbitmq:4-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    ports:
+      - 5672:5672
+      - 15672:15672
