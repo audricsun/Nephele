@@ -7,4 +7,4 @@ class Zone(Model):
     description = models.TextField(null=False, blank=False, default="no description")
 
     def __str__(self):
-        return f"{self.display_name}({self.zone_id})"
+        return f"{self.zone_id}"

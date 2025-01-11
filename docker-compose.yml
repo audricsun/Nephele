@@ -1,13 +1,29 @@
 services:
+  # mysql:
+  #   image: registry.dev.lingjuninvest.org/library/mysql:8.0.40-bookworm
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: test
+  #     MYSQL_DATABASE: test-db
+  #   ports:
+  #     - 3306:3306
+  #   volumes:
+  #     - ./.docker/mysql:/var/lib/mysql
+
   db:
-    image: registry.dev.lingjuninvest.org/library/mysql:8.0.40-bookworm
+    image: arm64v8/postgres:12-alpine3.20
+    shm_size: 128mb
+    # volumes:
+    #   - ./.docker/postgresql:/var/lib/postgresql/
     environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: test-db
+      POSTGRES_PASSWORD: example
     ports:
-      - 3306:3306
-    volumes:
-      - ./.docker/mysql:/var/lib/mysql
+      - 5432:5432
+
+  adminer:
+    image: arm64v8/adminer:4
+    restart: always
+    ports:
+      - 8080:8080
 
   broker:
     image: arm64v8/rabbitmq:4-management-alpine
@@ -17,3 +33,9 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+
+  mailhog:
+    image: richarvey/mailhog:1.3-linux-arm-v7
+    ports:
+      - 2525:1025
+      - 8025:8025
