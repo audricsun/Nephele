@@ -68,12 +68,19 @@ DATABASES = {
     #     "ENGINE": "django.db.backends.sqlite3",
     #     "NAME": BASE_DIR / "db.sqlite3",
     # }
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "test-db",
+    # "default": {
+    #     "ENGINE": "django.db.backends.mysql",
+    #     "NAME": "test-db",
+    #     "HOST": "localhost",
+    #     "USER": "root",
+    #     "PASSWORD": "test",
+    # }
+     "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "nephele",  # Replace with your actual database name
         "HOST": "localhost",
-        "USER": "root",
-        "PASSWORD": "test",
+        "USER": "postgres",
+        "PASSWORD": "example",
     }
 }
 
