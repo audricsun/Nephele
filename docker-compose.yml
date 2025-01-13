@@ -21,6 +21,7 @@ services:
     #   - ./.docker/postgresql:/var/lib/postgresql/
     environment:
       POSTGRES_PASSWORD: example
+      POSTGRES_DB: nephele
     ports:
       - 5432:5432
 
