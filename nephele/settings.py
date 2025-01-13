@@ -76,7 +76,7 @@ DATABASES = {
      "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "nephele",  # Replace with your actual database name
-        "HOST": "localhost",
+        "HOST": "db",
         "USER": "postgres",
         "PASSWORD": "example",
     }
@@ -129,7 +129,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'amqp://user:password@localhost:5672//'
+CELERY_BROKER_URL = 'amqp://user:password@broker:5672//'
 # CELERY_RESULT_BACKEND = 'django-cache'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
