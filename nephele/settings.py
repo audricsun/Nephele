@@ -1,6 +1,6 @@
 from pathlib import Path
 import django_stubs_ext
-
+from os import environ
 django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # "django_celery_beat",
     # "django_celery_results",
+    "apps.user",
     "apps.cloud",
     "apps.data",
     "apps.project",
@@ -76,7 +77,7 @@ DATABASES = {
      "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "nephele",  # Replace with your actual database name
-        "HOST": "db",
+        "HOST": environ.get('DATABASES__DEFAULT__HOST', 'localhost'),
         "USER": "postgres",
         "PASSWORD": "example",
     }

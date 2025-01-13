@@ -21,9 +21,11 @@ services:
         - action: rebuild
           path: pyproject.toml
     volumes:
-      - ./nephele:/ops/nephele/nephele:ro
+      - ./nephele:/opt/nephele/nephele:ro
       - ./apps:/opt/nephele/apps:ro
       - ./manage.py:/opt/nephele/manage.py:ro
+    environment:
+      - DATABASES__DEFAULT__HOST=db
     ports:
       - 8000:8000
   db:
