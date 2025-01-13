@@ -1,7 +1,13 @@
 {
     "cSpell.words": [
+        "adminer",
+        "mailhog",
         "nephele",
-        "Timestampable",
-        "runserver"
+        "pyproject",
+        "rabbitmq",
+        "RABBITMQ",
+        "richarvey",
+        "runserver",
+        "Timestampable"
     ]
 }

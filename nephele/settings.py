@@ -1,8 +1,6 @@
 from pathlib import Path
 import django_stubs_ext
-import pymysql
 
-pymysql.install_as_MySQLdb()
 django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
