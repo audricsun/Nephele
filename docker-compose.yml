@@ -2,6 +2,13 @@ services:
   nephele:
     build: .
     image: nephele:latest
+    command:
+      - uv
+      - run
+      - --
+      - manage.py
+      - runserver
+      - 0.0.0.0:8000
     develop:
       watch:
         # Sync the working directory with the `/app` directory in the container
@@ -12,17 +19,18 @@ services:
           ignore:
             - .venv/
         - action: rebuild
-          path: package.json
+          path: pyproject.toml
     volumes:
       - ./nephele:/ops/nephele/nephele:ro
       - ./apps:/opt/nephele/apps:ro
       - ./manage.py:/opt/nephele/manage.py:ro
+    ports:
+      - 8000:8000
   db:
-    image: ${ARM:+arm64v8/}postgres:12-alpine3.20
-
+    image: ${ARM:+arm64v8/}postgres:17
     shm_size: 128mb
-    # volumes:
-    #   - ./.docker/postgresql:/var/lib/postgresql/
+    volumes:
+      - ./.docker/postgresql:/var/lib/postgresql/
     environment:
       POSTGRES_PASSWORD: example
       POSTGRES_DB: nephele

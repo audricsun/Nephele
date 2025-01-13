@@ -5,3 +5,4 @@ __pycache__
 docker-compose.yml
 Dockerfile
 Makefile
+.docker/
