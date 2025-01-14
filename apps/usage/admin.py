@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import ClusterResourceUsage, StorageUsage
+from .models import ClusterUsage, StorageUsage
 
 
 admin.site.register(
     (
-        ClusterResourceUsage,
+        ClusterUsage,
         StorageUsage,
     )
 )
