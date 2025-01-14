@@ -1,6 +1,7 @@
 from django.db import models
-from nephele.models import Model
+
 from apps.project.models import Project
+from nephele.models import Model
 
 
 class Zone(Model):
@@ -57,6 +58,50 @@ class Quota(Model):
         null=False,
         blank=False,
     )
+
+    class Meta:
+        unique_together = (
+            "zone",
+            "project",
+        )
+
     quota_cpu = models.IntegerField(default=0)
     quota_gpu = models.IntegerField(default=0)
     quota_mem = models.IntegerField(default=0)
+
+
+class ReservePlan(Model):
+    zone = models.ForeignKey(
+        Zone, on_delete=models.CASCADE, related_name="reserve_plan"
+    )
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="reserve_plan"
+    )
+    reserve_cpu = models.IntegerField(default=0)
+    reserve_gpu = models.IntegerField(default=0)
+    reserve_mem = models.IntegerField(default=0)
+    reserve_start = models.DateTimeField()
+    reserve_end = models.DateTimeField()
+    reserve_status = models.BooleanField(default=False)
+    reserve_reason = models.TextField(null=False, blank=False, default="no reason")
+
+    def __str__(self):
+        return f"{self.project}::{self.reserve_cpu}::{self.reserve_gpu}::{self.reserve_mem}::{self.reserve_start}::{self.reserve_end}"
+
+
+class Node(Model):
+    zone = models.ForeignKey(Zone, on_delete=models.CASCADE, related_name="nodes")
+    cluster_provider = models.ForeignKey(
+        ClusterProvider, on_delete=models.CASCADE, related_name="nodes"
+    )
+    node_name = models.CharField(max_length=64, unique=False, null=False, blank=False)
+    node_ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=False)
+    node_ib_ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=False)
+    node_external_ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=False)
+    node_status = models.BooleanField(default=False)
+    node_cpu = models.IntegerField(default=0)
+    node_gpu = models.IntegerField(default=0)
+    node_mem = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.node_name}::{self.node_ip}"

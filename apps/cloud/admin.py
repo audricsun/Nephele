@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Zone, ClusterProvider, ClusterCapacity, Quota
+
+from .models import ClusterCapacity, ClusterProvider, Node, Quota, ReservePlan, Zone
 
 
 class ClusterProviderInline(admin.StackedInline):
@@ -24,7 +25,7 @@ class ZoneAdmin(admin.ModelAdmin):
         "updated_at",
         "created_at",
         "deleted_at",
-        "capacity"
+        "capacity",
     ]
     readonly_fields: list[str] = [
         "id",
@@ -35,4 +36,68 @@ class ZoneAdmin(admin.ModelAdmin):
     list_filter: list[str] = ["created_at", "zone_id"]
     inlines = [ClusterProviderInline, ClusterCapacityInline]
 
-admin.site.register(Quota)
+
+@admin.register(Quota)
+class QuotaAdmin(admin.ModelAdmin):
+    list_display: list[str] = [
+        "id",
+        "zone",
+        "project",
+        "quota_cpu",
+        "quota_gpu",
+        "quota_mem",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    readonly_fields: list[str] = [
+        "id",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    list_filter: list[str] = ["created_at", "project"]
+
+
+@admin.register(Node)
+class NodeAdmin(admin.ModelAdmin):
+    list_display: list[str] = [
+        "id",
+        "zone",
+        "cluster_provider",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    readonly_fields: list[str] = [
+        "id",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    list_filter: list[str] = ["created_at", "zone"]
+
+
+@admin.register(ReservePlan)
+class ReservePlanAdmin(admin.ModelAdmin):
+    list_display: list[str] = [
+        "id",
+        "zone",
+        "project",
+        "reserve_cpu",
+        "reserve_gpu",
+        "reserve_mem",
+        "reserve_start",
+        "reserve_end",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    readonly_fields: list[str] = [
+        "id",
+        "updated_at",
+        "created_at",
+        "deleted_at",
+    ]
+    list_editable = ["reserve_start", "reserve_end"]
+    list_filter: list[str] = ["created_at", "project"]
