@@ -1,6 +1,8 @@
-from pathlib import Path
-import django_stubs_ext
 from os import environ
+from pathlib import Path
+
+import django_stubs_ext
+
 django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,10 +59,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "nephele.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     # "default": {
