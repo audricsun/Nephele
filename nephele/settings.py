@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "apps.project",
     "apps.storage",
     "apps.task",
+    "apps.usage"
 ]
 
 MIDDLEWARE = [

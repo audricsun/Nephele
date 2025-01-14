@@ -9,7 +9,9 @@ class DatasetInLine(admin.TabularInline):
     extra = 0
 
 
-admin.site.register([Class])
+class QuotaInLine(admin.TabularInline):
+    model = Quota
+    extra = 0
 
 
 @admin.register(Quota)
@@ -31,3 +33,13 @@ class QuotaAdmin(admin.ModelAdmin):
     ]
     inlines = [DatasetInLine]
     readonly_fields = ["deleted_at", "created_at", "updated_at"]
+
+
+@admin.register(Class)
+class ClassAdmin(admin.ModelAdmin):
+    def list_quotas(self, obj):
+        return ",".join([f"{quota}" for quota in obj.quotas.all()])
+
+    list_display: List[str] = ["id", "name", "zone", "root_path", "list_quotas"]
+    readonly_fields = ["deleted_at", "created_at", "updated_at"]
+    inlines = [QuotaInLine]
