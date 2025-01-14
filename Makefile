@@ -22,15 +22,18 @@ arch_env:
 	@echo ARCHITECTURE=$(ARCHITECTURE) OS=$(OS) ARM=$(ARM)
 
 # Bring up the mailhog service with the appropriate environment variables
-dev_full:
-	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose up mailhog
+compose-up:
+	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose up
+
+compose-pull:
+	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose pull --ignore-buildable
 
 # Run database migrations and create a superuser
-migrate:
+init-migrate:
 	# Run migrations
-	docker compose run nephele uv run -- manage.py migrate
+	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose run nephele uv run -- manage.py migrate
 	# Create a superuser with predefined credentials
-	docker compose run -d \
+	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose run -d \
 	-e DJANGO_SUPERUSER_USERNAME=admin \
 	-e DJANGO_SUPERUSER_PASSWORD=admin \
 	-e DJANGO_SUPERUSER_EMAIL=admin@example.com \

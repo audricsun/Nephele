@@ -2,6 +2,9 @@ services:
   nephele:
     build: .
     image: nephele:latest
+    depends_on:
+      - db
+      - broker
     command:
       - uv
       - run
