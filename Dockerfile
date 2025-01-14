@@ -1,7 +1,9 @@
 FROM python:3.12-slim
 
 WORKDIR /opt/nephele
-RUN pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple uv
+RUN pip install --no-cache \
+    -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple \
+    uv
 
 COPY pyproject.toml uv.lock /opt/nephele/
 RUN uv sync --frozen -v

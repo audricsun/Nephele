@@ -19,10 +19,10 @@ class SoftDeleteManager(Manager):
 
     def delete(self, hard: bool = False):
         return self.get_queryset().delete(hard=hard)
-    
+
     def soft_delete(self):
         return self.delete(hard=False)
-    
+
     def hard_delete(self):
         return self.delete(hard=True)
 
