@@ -9,3 +9,14 @@ class Employee(Model):
 
     def __str__(self):
         return self.department
+
+
+class UserSettings(Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    notification_level = models.IntegerField(default=0)
+
+
+class UserProfile(Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    theme = models.CharField(max_length=100)
+    locale = models.CharField(max_length=100)
