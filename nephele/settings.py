@@ -1,8 +1,8 @@
+from os import environ
 from pathlib import Path
-import django_stubs_ext
-import pymysql
 
-pymysql.install_as_MySQLdb()
+import django_stubs_ext
+
 django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # "django_celery_beat",
     # "django_celery_results",
+    "apps.user",
     "apps.cloud",
     "apps.data",
     "apps.project",
@@ -59,10 +60,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "nephele.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     # "default": {
     #     "ENGINE": "django.db.backends.sqlite3",
@@ -78,7 +75,7 @@ DATABASES = {
      "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "nephele",  # Replace with your actual database name
-        "HOST": "localhost",
+        "HOST": environ.get('DATABASES__DEFAULT__HOST', 'localhost'),
         "USER": "postgres",
         "PASSWORD": "example",
     }
@@ -131,7 +128,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'amqp://user:password@localhost:5672//'
+CELERY_BROKER_URL = 'amqp://user:password@broker:5672//'
 # CELERY_RESULT_BACKEND = 'django-cache'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
