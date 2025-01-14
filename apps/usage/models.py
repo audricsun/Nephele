@@ -3,15 +3,15 @@ from nephele.models import Model
 from apps.project.models import Project
 
 
-class ClusterResourceUsage(Model):
+class ClusterUsage(Model):
     cpu_requested = models.IntegerField(default=0)
     project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name="cluster_resource_usage"
+        Project, on_delete=models.CASCADE, related_name="cluster_usage"
     )
 
 
 class StorageUsage(Model):
     storage_used = models.IntegerField(default=0)
     project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name="cluster_storage_usage"
+        Project, on_delete=models.CASCADE, related_name="storage_usage"
     )
