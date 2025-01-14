@@ -26,14 +26,14 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display: tuple[str] = (
         "id",
         "name",
+        "is_active",
         "slug",
         "nested_depth",
         "description",
         "parent",
-        "is_active",
+        "member_max_roles",
         "direct_members",
         "parent_members",
-        "member_max_roles",
         "updated_at",
         "created_at",
     )
