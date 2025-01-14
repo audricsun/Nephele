@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, User, Membership
+from .models import Project, Membership
 
 # Register your models here.
 
@@ -54,7 +54,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "updated_at",
         "deleted_at",
         "parent_members",
-        "member_max_roles"
+        "member_max_roles",
     )
     list_editable = ("name",)
     search_fields = [
