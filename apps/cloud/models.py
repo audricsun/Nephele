@@ -1,7 +1,8 @@
 from django.db import models
-
+from django.db.models import Q
 from apps.project.models import Project
 from nephele.models import Model
+from django.core.exceptions import ValidationError
 
 
 class Zone(Model):
@@ -60,14 +61,20 @@ class Quota(Model):
     )
 
     class Meta:
-        unique_together = (
-            "zone",
-            "project",
-        )
+        constraints = [
+            models.UniqueConstraint(
+                fields=['zone', 'project',],
+                condition=Q(deleted_at__isnull=True),
+                name='unique_if_not_deleted')
+        ]
+    def clean(self):
+        if self.__class__._default_manager.filter(zone=self.zone, project=self.project).exclude(pk=self.pk).exists():
+            raise ValidationError('Quota for this project already exists') 
 
     quota_cpu = models.IntegerField(default=0)
     quota_gpu = models.IntegerField(default=0)
     quota_mem = models.IntegerField(default=0)
+
 
 
 class ReservePlan(Model):
