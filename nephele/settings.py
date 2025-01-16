@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     "apps.project",
     "apps.storage",
     "apps.task",
-    "apps.usage"
+    "apps.usage",
+    "ninja_extra",
 ]
 
 MIDDLEWARE = [
@@ -73,10 +74,10 @@ DATABASES = {
     #     "USER": "root",
     #     "PASSWORD": "test",
     # }
-     "default": {
+    "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "nephele",  # Replace with your actual database name
-        "HOST": environ.get('DATABASES__DEFAULT__HOST', 'localhost'),
+        "HOST": environ.get("DATABASES__DEFAULT__HOST", "localhost"),
         "USER": "postgres",
         "PASSWORD": "example",
     }
@@ -129,10 +130,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_TIMEZONE = "UTC"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'amqp://user:password@broker:5672//'
+CELERY_BROKER_URL = "amqp://user:password@broker:5672//"
 # CELERY_RESULT_BACKEND = 'django-cache'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # # pick which cache from the CACHES setting.
 # CELERY_CACHE_BACKEND = 'default'
 
