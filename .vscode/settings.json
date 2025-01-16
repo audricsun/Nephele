@@ -8,6 +8,7 @@
         "pyproject",
         "rabbitmq",
         "RABBITMQ",
+        "Redoc",
         "richarvey",
         "runserver",
         "Timestampable"

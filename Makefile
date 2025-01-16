@@ -4,10 +4,9 @@ OS = $(shell uname -s)
 
 # Set variables based on the architecture
 ifeq ($(ARCHITECTURE),arm64)
-	ARM = true
+	ARM = "yes"
 	IMG_ARCH = arm64
 else
-	ARM = false
 	IMG_ARCH = amd64
 endif
 
