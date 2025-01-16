@@ -17,9 +17,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from ninja import NinjaAPI
+from ninja_extra import NinjaExtraAPI
 
-api = NinjaAPI(
+api = NinjaExtraAPI(
     title="Nephele API",
     version="1.0.0",
     description="Nephele API",
