@@ -22,6 +22,9 @@ arch_env:
 	@echo ARCHITECTURE=$(ARCHITECTURE) OS=$(OS) ARM=$(ARM)
 
 # Bring up the mailhog service with the appropriate environment variables
+build:
+	docker compose build nephele
+
 compose-up:
 	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose up
 
