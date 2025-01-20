@@ -1,7 +1,12 @@
 from django.contrib import admin
-from .models import Project, Membership
+from django.utils.safestring import mark_safe
+from .models import Project, Membership, ProjectSettings
 
-# Register your models here.
+
+class ProjectSettingsInline(admin.StackedInline):
+    model = ProjectSettings
+    can_delete = False
+    verbose_name_plural = "settings"
 
 
 class ProjectMemberInline(admin.TabularInline):
@@ -12,10 +17,16 @@ class ProjectMemberInline(admin.TabularInline):
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     def direct_members(self, obj):
-        return ",".join([str(m) for m in obj.direct_membership()])
+        # return ",".join([str(m) for m in obj.direct_membership()])
+        return mark_safe(
+            f"<ul>{''.join([f'<li>{str(m)}</li>' for m in obj.direct_membership()])}</ul>"
+        )
 
     def parent_members(self, obj) -> str:
-        return ",".join([str(m) for m in obj.parent_memberships()])
+        # return ",".join([str(m) for m in obj.parent_memberships()])
+        return mark_safe(
+            f"<ul>{''.join([f'<li>{str(m)}</li>' for m in obj.parent_memberships()])}</ul>"
+        )
 
     def member_max_roles(self, obj) -> str:
         return [
@@ -26,6 +37,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display: tuple[str] = (
         "id",
         "name",
+        "display_name",
         "is_active",
         "slug",
         "nested_depth",
@@ -38,7 +50,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "created_at",
     )
     member_max_roles.short_description = "Membership(Max Role)"
-    inlines: tuple[str] = (ProjectMemberInline,)
+    inlines: tuple[str] = (ProjectMemberInline, ProjectSettingsInline)
     list_filter: tuple[str] = (
         "is_active",
         "created_at",
@@ -56,7 +68,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "parent_members",
         "member_max_roles",
     )
-    list_editable = ("name",)
+    list_editable = ("display_name",)
     search_fields = [
         "name",
     ]

@@ -1,0 +1,199 @@
+apiVersion: batch.volcano.sh/v1alpha1
+kind: Job
+metadata:
+  annotations:
+    alpha-studio: v3
+  labels:
+    task-group-name: pool-0120-032929-122
+    task-launch-time: 0120-032929-122
+    task-name: pool-0120-032929-122
+    task-name-uniq: pool-0120-032929-122
+  name: pool-0120-032929-122
+  namespace: {{ namespace }}
+  resourceVersion: "1652204233"
+  uid: 571cdd9e-75dd-4ce8-acd6-6fffb132f88c
+spec:
+  maxRetry: 1
+  minAvailable: 1
+  plugins:
+    env: []
+  priorityClassName: p2
+  queue: {{ task_queue }}
+  schedulerName: volcano
+  tasks:
+  - maxRetry: 3
+    minAvailable: 1
+    name: worker
+    replicas: 1
+    template:
+      metadata:
+        annotations:
+          alpha-studio: v3
+          sidecar.istio.io/inject: "false"
+        labels:
+          POOL_WEIGHT: "1"
+          SIM_WORKSPACE_S3: pool-0120-032929-122
+          SIM_WORKSPACE_S3_DATE: "2025-01-20"
+          alpha-studio: v3
+          artifact: pool-0120-032929-122
+          dp-extension: zsim
+          group-name: ""
+          job-name: pool-0120-032929-122
+          pool-queue-url: smoke-zsim-pool-0120-032929-122
+          priority: p0
+          task-group-name: pool-0120-032929-122
+          task-launch-time: 0120-032929-122
+          task-name: pool-0120-032929-122
+          task-name-uniq: pool-0120-032929-122
+        name: worker
+      spec:
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                - key: lingjuninvest.com/reserved-for
+                  operator: In
+                  values:
+                  - smoke
+              weight: 100
+            - preference:
+                matchExpressions:
+                - key: node-acl.alpha.studio/smoke
+                  operator: In
+                  values:
+                  - allow
+              weight: 100
+            - preference:
+                matchExpressions:
+                - key: task-acl.alpha.studio/zsim
+                  operator: In
+                  values:
+                  - allow
+              weight: 100
+            - preference:
+                matchExpressions:
+                - key: lingjuninvest.org/node-cpu-class
+                  operator: In
+                  values:
+                  - ultra
+              weight: 50
+            - preference:
+                matchExpressions:
+                - key: lingjuninvest.org/node-cpu-class
+                  operator: In
+                  values:
+                  - high
+              weight: 30
+        containers:
+        - command:
+          - /dp/worker.run
+          env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          - name: ARTIFACT
+            value: pool-0120-032929-122
+          - name: plugin
+            value: zsim
+          - name: VC_WORKER_NUM
+            value: "1"
+          - name: NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: DP_TASK_LAUNCH_TIME
+            value: 0120-032929-122
+          - name: SUMMARY
+            value: '''false'''
+          - name: SIM_CONFIG_LOOP_NAME
+            value: pool-0120-032929-122
+          - name: SIM_PLUGIN
+            value: zsim
+          - name: SIM_PYTHON_EXE
+            value: python3
+          - name: SIM_EXE
+            value: /data/zsimrelease/research/bin/zsim
+          - name: SIM_SUM_EXE
+            value: /dp/simsum_v6_dpcsv.py
+          - name: SIM_WORKSPACE_S3
+            value: tasks/zsim/2025/01/20/pool-0120-032929-122
+          - name: artifact
+            value: pool-0120-032929-122
+          - name: workingdir
+            value: /opt/workspace
+          - name: pythonexe
+            value: python3
+          - name: MINIO_BUCKET
+            value: smoke
+          - name: POOL_STORE_URL
+            value: redis://default:ask-a-stupid-question-1234!@192.168.2.239:7380/0
+          - name: TOKEN_STORE_URL
+            value: redis://default:ask-a-stupid-question-1234!@192.168.2.239:7379/7
+          - name: CONF_STORE_URL
+            value: redis://default:ask-a-stupid-question-1234!@192.168.2.239:7379/6
+          - name: OIDC_USERNAME
+            value: smoke
+          - name: OIDC_PASSWORD
+            value: nzKpIawqdVC8ZX2
+          - name: ARTIFACTS_COLLECT
+            value: ./pnl/
+          - name: pool-queue-url
+            value: smoke-zsim-pool-0120-032929-122
+          - name: STDOUT_TO_FILE
+            value: "true"
+          - name: POOL_WEIGHT
+            value: "1"
+          image: registry.dev.lingjuninvest.org/alphastudio-release/centos7-ksim-v1:3.0.13-dev8
+          imagePullPolicy: IfNotPresent
+          name: worker
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          volumeMounts:
+          - mountPath: /opt/workspace/pnl
+            name: pnl
+          - mountPath: /worker
+            name: worker
+          - mountPath: /data/datacache
+            name: datacache
+            readOnly: true
+          - mountPath: /data2
+            name: data2
+            readOnly: true
+          - mountPath: /data/zsimrelease
+            name: zsimrelease
+            readOnly: true
+          workingDir: /opt/workspace
+        priorityClassName: p2
+        restartPolicy: OnFailure
+        tolerations:
+        - effect: NoSchedule
+          key: node-acl.alpha.studio
+          operator: Equal
+          value: smoke
+        - effect: NoExecute
+          key: node-acl.alpha.studio
+          operator: Equal
+          value: smoke
+        volumes:
+        - emptyDir: {}
+          name: pnl
+        - emptyDir: {}
+          name: worker
+        - hostPath:
+            path: /share/commoncache/zsim-data-cache/datacache
+            type: Directory
+          name: datacache
+        - hostPath:
+            path: /share/commoncache/zsim-data-cache/data2
+            type: Directory
+          name: data2
+        - hostPath:
+            path: /share/commoncache/zsim-data-cache/zsimrelease
+            type: Directory
+          name: zsimrelease
+  ttlSecondsAfterFinished: 604800
