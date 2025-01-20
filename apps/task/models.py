@@ -1,6 +1,7 @@
 from django.db import models
 from nephele.models import Model
 from apps.project.models import Project
+from django.template.loader import render_to_string
 
 
 class WorkloadType(Model):
@@ -47,6 +48,28 @@ class Template(Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    def render(self):
+        return render_to_string(
+            self.workload_type.template_file,
+            {
+                "name": self.name,
+                "description": self.description,
+                "entrypoint": self.entrypoint,
+                "cmd": self.cmd,
+                "env_vars": self.env_vars,
+                "selectors": self.selectors,
+                "cpu_limit": self.cpu_limit,
+                "cpu_request": self.cpu_request,
+                "mem_limit": self.mem_limit,
+                "mem_request": self.mem_request,
+                "storage_limit": self.storage_limit,
+                "storage_request": self.storage_request,
+                "gpu_limit": self.gpu_limit,
+                "gpu_model": self.gpu_model,
+                "node_requested": self.node_requested,
+            },
+        )
 
 
 class Spec(Model):

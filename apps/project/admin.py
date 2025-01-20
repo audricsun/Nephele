@@ -30,7 +30,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
     def member_max_roles(self, obj) -> str:
         return [
-            f"{mr.get("user_name")}<{mr.get("user_id")}>[role={mr.get("max_role")}]"
+            f"{mr.get('user_name')}<{mr.get('user_id')}>[role={mr.get('max_role')}]"
             for mr in obj.all_membership_with_max_role()
         ]
 
