@@ -28,7 +28,9 @@ class Template(Model):
         db_comment="All task template should against one workload type",
     )
     entrypoint = models.CharField(max_length=100, null=True, blank=True)
-    cmd = models.JSONField(default=dict)
+    work_dir = models.CharField(max_length=100, null=True, blank=True)
+
+    cmd = models.JSONField(default=["echo", '"Hello, World!"'])
     env_vars = models.JSONField(default=dict)
     selectors = models.JSONField(default=dict)
 
