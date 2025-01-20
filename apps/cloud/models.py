@@ -63,18 +63,37 @@ class Quota(Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['zone', 'project',],
+                fields=[
+                    "zone",
+                    "project",
+                ],
                 condition=Q(deleted_at__isnull=True),
-                name='unique_if_not_deleted')
+                name="unique_if_not_deleted",
+            )
         ]
+
     def clean(self):
-        if self.__class__._default_manager.filter(zone=self.zone, project=self.project).exclude(pk=self.pk).exists():
-            raise ValidationError('Quota for this project already exists') 
+        if (
+            self.__class__._default_manager.filter(zone=self.zone, project=self.project)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError("Quota for this project already exists")
 
     quota_cpu = models.IntegerField(default=0)
     quota_gpu = models.IntegerField(default=0)
     quota_mem = models.IntegerField(default=0)
 
+
+class TaskQueue(Model):
+    quota = models.ForeignKey(
+        Quota,
+        on_delete=models.CASCADE,
+        related_name="queues",
+        null=False,
+        blank=False,
+        db_comment="The quota that this queue belongs to",
+    )
 
 
 class ReservePlan(Model):
