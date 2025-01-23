@@ -25,7 +25,7 @@ build:
 	docker compose build nephele
 
 compose-up:
-	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose up
+	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose up --build
 
 compose-pull:
 	ARM=$(ARM) OS=$(OS) IMG_ARCH=$(IMG_ARCH) docker compose pull --ignore-buildable

@@ -17,7 +17,7 @@ class DatasetAdmin(admin.ModelAdmin):
         "updated_at",
         "created_at",
     ]
-    readonly_fields = ["deleted_at", "created_at", "updated_at"]
+    readonly_fields: List[str] = ["deleted_at", "created_at", "updated_at"]
 
 
 @admin.register(Mount)

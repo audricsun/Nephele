@@ -104,6 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -146,3 +149,33 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 #         'LOCATION': 'celery_task_caches',
 #     }
 # }
+
+
+if DEBUG:
+    MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
+    INSTALLED_APPS += [
+        "debug_toolbar",
+    ]
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+
+    # this is the main reason for not showing up the toolbar
+    import mimetypes
+
+    mimetypes.add_type("application/javascript", ".js", True)
+
+    DEBUG_TOOLBAR_CONFIG = {"INSERT_BEFORE": "</body>"}
+
+    # from here down are desperate attempts to get it to load.
+    def show_toolbar(request):
+        return True
+
+    SHOW_TOOLBAR_CALLBACK = show_toolbar
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: True,
+    }

@@ -3,9 +3,10 @@ import uuid
 from django.db import models, router
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
+from django_lifecycle import LifecycleModelMixin
 from . import signals
 from .managers import SoftDeleteManager
+from django.contrib.auth.models import User
 
 
 class Timestampable(models.Model):
@@ -66,6 +67,33 @@ class UuidPk(models.Model):
         abstract = True
 
 
-class Model(UuidPk, Timestampable, SoftDeletes, models.Model):
+class TrackUserOperation(models.Model):
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="%(model_name)s_%(class)s_created_by",
+        null=True,
+        blank=True,
+    )
+    deleted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="%(model_name)s_%(class)s_deleted_by",
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Model(
+    UuidPk,
+    Timestampable,
+    SoftDeletes,
+    # TrackUserOperation,
+    LifecycleModelMixin,
+    models.Model,
+):
     class Meta:
         abstract = True

@@ -24,6 +24,11 @@ class Project(Model):
     is_active = models.BooleanField(
         default=True,
     )  # Project active status
+    private = models.BooleanField(
+        default=False,
+        blank=False,
+        null=False,
+    )  # Project privacy status
     parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,

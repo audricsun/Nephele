@@ -34,16 +34,6 @@ class ClusterProvider(Model):
         return f"{self.id}::{self.name}"
 
 
-class ClusterCapacity(Model):
-    zone = models.OneToOneField(Zone, on_delete=models.CASCADE, related_name="capacity")
-    cluster_cpu_capacity = models.IntegerField(default=0)
-    cluster_gpu_capacity = models.IntegerField(default=0)
-    cluster_mem_capacity = models.IntegerField(default=0)
-
-    def __str__(self):
-        return f"cpu:{self.cluster_cpu_capacity} gpu:{self.cluster_gpu_capacity} mem:{self.cluster_mem_capacity}"
-
-
 class Quota(Model):
     zone = models.ForeignKey(
         Zone,
@@ -86,6 +76,9 @@ class Quota(Model):
 
 
 class TaskQueue(Model):
+    name = models.CharField(
+        max_length=64, unique=True, null=False, blank=False, default="default"
+    )
     quota = models.ForeignKey(
         Quota,
         on_delete=models.CASCADE,
@@ -94,6 +87,10 @@ class TaskQueue(Model):
         blank=False,
         db_comment="The quota that this queue belongs to",
     )
+    cpu_capacity = models.IntegerField(default=0)
+    mem_capacity = models.IntegerField(default=0)
+    gpu_capacity = models.IntegerField(default=0)
+    queue_selector = models.JSONField(default=dict, null=True, blank=True)
 
 
 class ReservePlan(Model):
@@ -116,10 +113,25 @@ class ReservePlan(Model):
 
 
 class Node(Model):
+    """
+    Represents a node in the cloud infrastructure.
+
+    Attributes:
+        zone (ForeignKey): The zone to which the node belongs.
+        node_name (CharField): The name of the node.
+        node_ip (GenericIPAddressField): The IP address of the node.
+        node_ib_ip (GenericIPAddressField): The InfiniBand IP address of the node.
+        node_external_ip (GenericIPAddressField): The external IP address of the node.
+        node_status (BooleanField): The status of the node (active/inactive).
+        node_cpu (IntegerField): The number of CPUs in the node.
+        node_gpu (IntegerField): The number of GPUs in the node.
+        node_mem (IntegerField): The amount of memory in the node.
+
+    Methods:
+        __str__(): Returns a string representation of the node.
+    """
+
     zone = models.ForeignKey(Zone, on_delete=models.CASCADE, related_name="nodes")
-    cluster_provider = models.ForeignKey(
-        ClusterProvider, on_delete=models.CASCADE, related_name="nodes"
-    )
     node_name = models.CharField(max_length=64, unique=False, null=False, blank=False)
     node_ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=False)
     node_ib_ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=False)
@@ -131,3 +143,18 @@ class Node(Model):
 
     def __str__(self):
         return f"{self.node_name}::{self.node_ip}"
+
+
+class ZoneCapacityStatic(Model):
+    zone = models.ForeignKey(
+        Zone, on_delete=models.CASCADE, related_name="capacity_static"
+    )
+    audited_at = models.DateTimeField(auto_now=True)
+    cpu_capacity = models.IntegerField(default=0)
+    gpu_capacity = models.IntegerField(default=0)
+    mem_capacity = models.IntegerField(default=0)
+
+    def __str__(self):
+        return (
+            f"cpu:{self.cpu_capacity} gpu:{self.gpu_capacity} mem:{self.mem_capacity}"
+        )

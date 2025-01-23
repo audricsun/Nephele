@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from .models import Project, Membership, ProjectSettings
+from apps.storage.models import Quota as sQuota
+from apps.cloud.models import Quota as cQuota
 
 
 class ProjectSettingsInline(admin.StackedInline):
@@ -11,6 +13,16 @@ class ProjectSettingsInline(admin.StackedInline):
 
 class ProjectMemberInline(admin.TabularInline):
     model = Membership
+    extra = 0
+
+
+class StorageQuotaInline(admin.TabularInline):
+    model = sQuota
+    extra = 0
+
+
+class ComputingQuotaInline(admin.TabularInline):
+    model = cQuota
     extra = 0
 
 
@@ -50,11 +62,17 @@ class ProjectAdmin(admin.ModelAdmin):
         "created_at",
     )
     member_max_roles.short_description = "Membership(Max Role)"
-    inlines: tuple[str] = (ProjectMemberInline, ProjectSettingsInline)
+    inlines: tuple[str] = (
+        ProjectMemberInline,
+        ProjectSettingsInline,
+        ComputingQuotaInline,
+        StorageQuotaInline,
+    )
     list_filter: tuple[str] = (
         "is_active",
         "created_at",
         "updated_at",
+        "private",
     )
     save_on_top = True
     ordering: tuple[str] = (

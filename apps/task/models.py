@@ -10,6 +10,8 @@ class WorkloadType(Model):
 
 
 class Template(Model):
+    """some template for task"""
+
     name = models.CharField(max_length=100)
     description = models.TextField(
         db_comment="Description of the task template", null=True, blank=True
@@ -30,9 +32,13 @@ class Template(Model):
     entrypoint = models.CharField(max_length=100, null=True, blank=True)
     work_dir = models.CharField(max_length=100, null=True, blank=True)
 
-    cmd = models.JSONField(default=["echo", '"Hello, World!"'])
-    env_vars = models.JSONField(default=dict)
-    selectors = models.JSONField(default=dict)
+    def _default_cmd():
+        return ["echo", "hello-world!"]
+
+    cmd = models.JSONField(default=_default_cmd)
+    env_vars = models.JSONField(default=dict, null=True, blank=True)
+    selectors = models.JSONField(default=dict, null=True, blank=True)
+    artifacts = models.JSONField(default=list, null=True, blank=True)
 
     cpu_limit = models.IntegerField(default=1)
     cpu_request = models.IntegerField(default=1)
@@ -75,7 +81,7 @@ class Template(Model):
 
 
 class Spec(Model):
-    description = models.TextField(
+    note = models.TextField(
         default="no desc at the point",
         db_comment="Description of the task template",
     )
@@ -84,4 +90,23 @@ class Spec(Model):
         on_delete=models.CASCADE,
         null=True,
         db_comment="All task spec should against one task template",
+    )
+
+
+class BatchTask(Model):
+    display_name = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False,
+    )
+    spec = models.ForeignKey(
+        Spec,
+        on_delete=models.CASCADE,
+        null=False,
+        db_comment="All task should against one task spec",
+    )
+    template = models.ForeignKey(
+        Template,
+        on_delete=models.CASCADE,
+        null=False,
     )

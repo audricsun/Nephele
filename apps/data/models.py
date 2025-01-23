@@ -3,7 +3,8 @@ from nephele.models import Model
 from itertools import chain
 from apps.cloud.models import Zone
 from apps.storage.models import Quota
-from django.db.models.functions import Concat,Cast
+from django.db.models.functions import Concat, Cast
+from django.core.exceptions import ValidationError
 
 
 class Layout(Model):
@@ -30,15 +31,20 @@ class Layout(Model):
         else:
             return self.mounts.all()
 
+    def clean(self):
+        if self.parent:
+            if self.parent.zone != self.zone:
+                raise ValidationError(
+                    "layout can only be placed in the same zone as its parent when have parent specified"
+                )
+
 
 class Dataset(Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     display_name = models.CharField(max_length=255)
     default_mount = models.CharField(max_length=255)
     path = models.GeneratedField(
-        expression=Concat(
-            "name", models.Value("-"), Cast("id", models.CharField())
-        ),
+        expression=Concat("name", models.Value("-"), Cast("id", models.CharField())),
         output_field=models.CharField(max_length=100),
         db_persist=True,
     )
