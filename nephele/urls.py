@@ -18,6 +18,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ninja_extra import NinjaExtraAPI
+from debug_toolbar.toolbar import debug_toolbar_urls
+from django.http import HttpResponse
+import datetime
 
 api = NinjaExtraAPI(
     title="Nephele API",
@@ -32,7 +35,14 @@ def add(request):
     return {"status": "ok"}
 
 
+def current_datetime(request):
+    now = datetime.datetime.now()
+    html = '<html lang="en"><body>Hi!, It is now %s.</body></html>' % now
+    return HttpResponse(html)
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", api.urls),
-]
+    path("", current_datetime),
+] + debug_toolbar_urls()

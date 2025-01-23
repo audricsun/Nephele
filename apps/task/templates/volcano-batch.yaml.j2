@@ -1,0 +1,88 @@
+apiVersion: batch.volcano.sh/v1alpha1
+kind: Job
+metadata:
+  annotations:
+    alpha-studio: v3
+  labels:
+    task-group-name: pool-0120-032929-122
+    task-launch-time: 0120-032929-122
+    task-name: pool-0120-032929-122
+    task-name-uniq: pool-0120-032929-122
+  name: pool-0120-032929-122
+  namespace: {{ namespace }}
+  resourceVersion: "1652204233"
+  uid: 571cdd9e-75dd-4ce8-acd6-6fffb132f88c
+spec:
+  maxRetry: 1
+  minAvailable: 1
+  plugins:
+    env: []
+  priorityClassName: p2
+  queue: {{ task_queue }}
+  schedulerName: volcano
+  tasks:
+  - maxRetry: 3
+    minAvailable: 1
+    name: worker
+    replicas: 1
+    template:
+      metadata:
+        annotations:
+          alpha-studio: v3
+          sidecar.istio.io/inject: "false"
+        labels:
+          POOL_WEIGHT: "1"
+        name: worker
+      spec:
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                - key: labels
+                  operator: In
+                  values:
+                  - smoke
+              weight: 100
+        containers:
+        - command:
+          - sleep
+          - inf
+          env:
+          - name: NODE_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          image: image
+          imagePullPolicy: IfNotPresent
+          name: worker
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          volumeMounts:
+       
+          - mountPath: /worker
+            name: worker
+         
+          workingDir: /opt/workspace
+        priorityClassName: p2
+        restartPolicy: OnFailure
+        tolerations:
+        - effect: NoSchedule
+          key: node-acl.alpha.studio
+          operator: Equal
+          value: smoke
+        - effect: NoExecute
+          key: node-acl.alpha.studio
+          operator: Equal
+          value: smoke
+        volumes:
+        - emptyDir: {}
+          name: pnl
+        - emptyDir: {}
+          name: worker
+  ttlSecondsAfterFinished: 604800

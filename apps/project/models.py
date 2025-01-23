@@ -3,13 +3,32 @@ from django.db import models
 from nephele.models import Model
 from typing import Any, Dict, List
 from django.db.models import Max
+from django.core.exceptions import ValidationError
 
 
 # Define the Project model
 class Project(Model):
-    name = models.CharField(max_length=255)  # Project name
-    description = models.TextField(null=True, blank=True)  # Project description
-    is_active = models.BooleanField(default=True)  # Project active status
+    name = models.CharField(
+        max_length=255,
+        editable=False,
+    )  # Project name
+    display_name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+    )  # Project name
+    description = models.TextField(
+        null=True,
+        blank=True,
+    )  # Project description
+    is_active = models.BooleanField(
+        default=True,
+    )  # Project active status
+    private = models.BooleanField(
+        default=False,
+        blank=False,
+        null=False,
+    )  # Project privacy status
     parent = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
@@ -76,6 +95,10 @@ class Project(Model):
             .annotate(max_role=Max("user_role"))
         )
 
+    def clean(self):
+        if self.parent == self:
+            raise ValidationError("Not allowed to set parent project to self")
+
 
 # Define the MembershipRole choices
 class MembershipRole(models.IntegerChoices):
@@ -105,3 +128,24 @@ class Membership(models.Model):
     # String representation of the membership
     def __str__(self):
         return f"{self.project}::{self.user}::{self.get_role_display()}"
+
+
+class ProjectAccessLevel(models.TextChoices):
+    public: tuple[str, str] = "public", "Public"
+    internal: tuple[str, str] = "internal", "Internal"
+    private: tuple[str, str] = "private", "Private"
+
+
+class ProjectSettings(Model):
+    project = models.OneToOneField(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    access_level = models.CharField(
+        max_length=20,
+        choices=ProjectAccessLevel.choices,
+        default=ProjectAccessLevel.private,
+    )
+
+    def __str__(self):
+        return f"Settings<{self.project}>"

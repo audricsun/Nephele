@@ -2,6 +2,7 @@
     "cSpell.words": [
         "adminer",
         "createsuperuser",
+        "heritaged",
         "mailhog",
         "nephele",
         "noinput",
@@ -11,6 +12,15 @@
         "Redoc",
         "richarvey",
         "runserver",
-        "Timestampable"
-    ]
+        "Timestampable",
+        "inodes"
+    ],
+    "cSpell.customDictionaries": {
+        "custom-dictionary-workspace": {
+            "name": "custom-dictionary-workspace",
+            "path": "${workspaceFolder:Nephele}/.cspell/custom-dictionary-workspace.txt",
+            "addWords": true,
+            "scope": "workspace"
+        }
+    }
 }

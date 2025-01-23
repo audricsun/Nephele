@@ -45,6 +45,10 @@ services:
   adminer:
     image: ${ARM:+arm64v8/}adminer:4
     restart: always
+    environment:
+      - ADMINER_DEFAULT_DB_DRIVER=pgsql
+      - ADMINER_DEFAULT_DB_HOST=db
+      - ADMINER_DEFAULT_DB_NAME=nephele
     ports:
       - 8080:8080
 

@@ -1,3 +1,11 @@
 from django.contrib import admin
+from .models import Template, Spec, WorkloadType, BatchTask
 
-# Register your models here.
+admin.site.register(
+    [
+        WorkloadType,
+        Template,
+        Spec,
+        BatchTask,
+    ]
+)
