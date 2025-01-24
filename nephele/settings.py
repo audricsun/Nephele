@@ -1,5 +1,6 @@
 from os import environ
 from pathlib import Path
+import sys
 
 # from nephele.logging import configure_logging
 import django_stubs_ext
@@ -150,8 +151,8 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 #     }
 # }
 
-
-if DEBUG:
+TESTING = "test" in sys.argv
+if DEBUG and not TESTING:
     MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ]
