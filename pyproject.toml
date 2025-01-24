@@ -16,17 +16,18 @@ dependencies = [
     "kubernetes>=31.0.0",
     "loguru>=0.7.3",
     "django-treenode>=0.22.1",
+    "django-unfold>=0.45.0",
 ]
 
 [tool.uv]
 dev-dependencies = [
-    "celery-types>=0.22.0",
+    "django-debug-toolbar>=5.0.1",
     "django-types>=0.20.0",
     "django-stubs[compatible-mypy]>=5.1.1",
     "django-fake-model>=0.1.4",
+    "celery-types>=0.22.0",
     "kubernetes-stubs-elephant-fork>=31.0.0",
     "djlint>=1.36.4",
-    "django-debug-toolbar>=5.0.1",
 ]
 index-url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"
 

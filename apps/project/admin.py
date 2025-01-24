@@ -3,31 +3,33 @@ from django.utils.safestring import mark_safe
 from .models import Project, Membership, ProjectSettings
 from apps.storage.models import Quota as sQuota
 from apps.cloud.models import Quota as cQuota
+from unfold.admin import ModelAdmin
+from unfold.admin import StackedInline, TabularInline
 
 
-class ProjectSettingsInline(admin.StackedInline):
+class ProjectSettingsInline(StackedInline):
     model = ProjectSettings
     can_delete = False
     verbose_name_plural = "settings"
 
 
-class ProjectMemberInline(admin.TabularInline):
+class ProjectMemberInline(TabularInline):
     model = Membership
     extra = 0
 
 
-class StorageQuotaInline(admin.TabularInline):
+class StorageQuotaInline(TabularInline):
     model = sQuota
     extra = 0
 
 
-class ComputingQuotaInline(admin.TabularInline):
+class ComputingQuotaInline(TabularInline):
     model = cQuota
     extra = 0
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ModelAdmin):
     def direct_members(self, obj):
         # return ",".join([str(m) for m in obj.direct_membership()])
         return mark_safe(

@@ -91,7 +91,7 @@ class Model(
     UuidPk,
     Timestampable,
     SoftDeletes,
-    # TrackUserOperation,
+    # TrackUserOperation, # TODO: add user operation track to base model
     LifecycleModelMixin,
     models.Model,
 ):

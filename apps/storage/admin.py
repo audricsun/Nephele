@@ -2,6 +2,7 @@ from django.contrib import admin
 from typing import List
 from .models import Class, Quota
 from apps.data.models import Dataset
+from unfold.admin import ModelAdmin
 
 
 class DatasetInLine(admin.TabularInline):
@@ -15,7 +16,7 @@ class QuotaInLine(admin.TabularInline):
 
 
 @admin.register(Quota)
-class QuotaAdmin(admin.ModelAdmin):
+class QuotaAdmin(ModelAdmin):
     def provider(self, obj) -> str:
         return str(obj.provider)
 
@@ -36,7 +37,7 @@ class QuotaAdmin(admin.ModelAdmin):
 
 
 @admin.register(Class)
-class ClassAdmin(admin.ModelAdmin):
+class ClassAdmin(ModelAdmin):
     def list_quotas(self, obj):
         return ",".join([f"{quota}" for quota in obj.quotas.all()])
 

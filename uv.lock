@@ -516,6 +516,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-unfold"
+version = "0.45.0"
+source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ec/60/f552d46fff63f8021ff4dae5b04db61a64eed50a3fd5bbd76addc1d327e0/django_unfold-0.45.0.tar.gz", hash = "sha256:8ef4c7cdfdce93cedc4b893dced2b2a7092a03718150ef4fc68eda5516a8bccc", size = 751790 }
+wheels = [
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/a3/fd/f4c7a00ca6b502b01a7c7f225530c4b861dbdc45c57abb576ee57a3a72af/django_unfold-0.45.0-py3-none-any.whl", hash = "sha256:4d11b9dccc20f48235d8038191f66a6b805875c97c934400b6ef48538e004b09", size = 824239 },
+]
+
+[[package]]
 name = "djlint"
 version = "1.36.4"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" }
@@ -765,6 +777,7 @@ dependencies = [
     { name = "django-ninja" },
     { name = "django-ninja-extra" },
     { name = "django-treenode" },
+    { name = "django-unfold" },
     { name = "kubernetes" },
     { name = "loguru" },
     { name = "psycopg", extra = ["binary"] },
@@ -791,6 +804,7 @@ requires-dist = [
     { name = "django-ninja", specifier = ">=1.3.0" },
     { name = "django-ninja-extra", specifier = ">=0.22.2" },
     { name = "django-treenode", specifier = ">=0.22.1" },
+    { name = "django-unfold", specifier = ">=0.45.0" },
     { name = "kubernetes", specifier = ">=31.0.0" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.3" },

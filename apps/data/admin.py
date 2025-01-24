@@ -1,10 +1,11 @@
 from django.contrib import admin
 from typing import List
 from .models import Layout, Dataset, Mount
+from unfold.admin import ModelAdmin
 
 
 @admin.register(Dataset)
-class DatasetAdmin(admin.ModelAdmin):
+class DatasetAdmin(ModelAdmin):
     list_display: List[str] = [
         "id",
         "display_name",
@@ -21,7 +22,7 @@ class DatasetAdmin(admin.ModelAdmin):
 
 
 @admin.register(Mount)
-class MountsAdmin(admin.ModelAdmin):
+class MountsAdmin(ModelAdmin):
     list_display: list[str] = [
         "id",
         "dataset",
@@ -40,7 +41,7 @@ def format(input: str) -> str:
 
 
 @admin.register(Layout)
-class LayoutAdmin(admin.ModelAdmin):
+class LayoutAdmin(ModelAdmin):
     def mounts(self, obj) -> list[str]:
         return ",".join([f"{m}" for m in obj.mounts.all()])
 
