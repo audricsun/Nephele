@@ -36,11 +36,11 @@ wheels = [
 
 [[package]]
 name = "attrs"
-version = "24.3.0"
+version = "25.1.0"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" }
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/48/c8/6260f8ccc11f0917360fc0da435c5c9c7504e3db174d5a12a1494887b045/attrs-24.3.0.tar.gz", hash = "sha256:8f5c07333d543103541ba7be0e2ce16eeee8130cb0b3f9238ab904ce1e85baff", size = 805984 }
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/49/7c/fdf464bcc51d23881d110abd74b512a42b3d5d376a55a831b44c603ae17f/attrs-25.1.0.tar.gz", hash = "sha256:1c97078a80c814273a76b2a298a932eb681c87415c11dee0a6921de7f1b02c3e", size = 810562 }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/89/aa/ab0f7891a01eeb2d2e338ae8fecbe57fcebea1a24dbb64d45801bfab481d/attrs-24.3.0-py3-none-any.whl", hash = "sha256:ac96cd038792094f438ad1f6ff80837353805ac950cd2aa0e0625ef19850c308", size = 63397 },
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/fc/30/d4986a882011f9df997a55e6becd864812ccfcd821d64aac8570ee39f719/attrs-25.1.0-py3-none-any.whl", hash = "sha256:c75a69e28a550a7e93789579c22aa26b0f5b83b75dc4e08fe092980051e1090a", size = 63152 },
 ]
 
 [[package]]
@@ -445,7 +445,7 @@ wheels = [
 
 [[package]]
 name = "django-ninja-extra"
-version = "0.22.2"
+version = "0.22.3"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" }
 dependencies = [
     { name = "asgiref" },
@@ -454,9 +454,9 @@ dependencies = [
     { name = "django-ninja" },
     { name = "injector" },
 ]
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/f3/97/9ffdd863dacddda3017b5270bfa8623a99559ad66940c3966784e835fda1/django_ninja_extra-0.22.2.tar.gz", hash = "sha256:d0af10b50fba419eb9a5603b2c806f810a06bf219e92d1f37012bddc2063e602", size = 50542 }
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/fc/7d/b0741cf886c7449250045d6c1fa52d581754e36a5b905e1b380aa8ddbeb1/django_ninja_extra-0.22.3.tar.gz", hash = "sha256:2a7f53a6fd0c622987759c1eba865aa8eb5d56380b5a650cb3ce7220a3221870", size = 51086 }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/a9/b6/2087c7b3289f4245ff340b91943988a28134523dabf94e3bb6dde4e0aae0/django_ninja_extra-0.22.2-py3-none-any.whl", hash = "sha256:813a81435f69ef73a75e056c3bf0e3d4ad524bea8a14203ec791aa8b9bfc2a99", size = 67650 },
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/53/d6/5c6e38ab6f9858fcc825ee5161139ba6719e6e27dc0ba1416bb9d4df4597/django_ninja_extra-0.22.3-py3-none-any.whl", hash = "sha256:4a93337933e5dcc1ea742531ca68d77b718e2df0dcdadb12e60b67594189a720", size = 67940 },
 ]
 
 [[package]]
@@ -517,14 +517,14 @@ wheels = [
 
 [[package]]
 name = "django-unfold"
-version = "0.45.0"
+version = "0.46.0"
 source = { registry = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/ec/60/f552d46fff63f8021ff4dae5b04db61a64eed50a3fd5bbd76addc1d327e0/django_unfold-0.45.0.tar.gz", hash = "sha256:8ef4c7cdfdce93cedc4b893dced2b2a7092a03718150ef4fc68eda5516a8bccc", size = 751790 }
+sdist = { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/9a/0a/82b13a865afa5ce54d096d3413605c18437ccf3b693c153b63ee0925482a/django_unfold-0.46.0.tar.gz", hash = "sha256:f949d80fa4315c058fb6e8d6602515ad46534fe19468f5718c34346816dfbfe3", size = 752234 }
 wheels = [
-    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/a3/fd/f4c7a00ca6b502b01a7c7f225530c4b861dbdc45c57abb576ee57a3a72af/django_unfold-0.45.0-py3-none-any.whl", hash = "sha256:4d11b9dccc20f48235d8038191f66a6b805875c97c934400b6ef48538e004b09", size = 824239 },
+    { url = "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/packages/b9/0f/953410a5825fb813e1b64abb3f77a86075be1f478d2f0d924e62cf7dc0b4/django_unfold-0.46.0-py3-none-any.whl", hash = "sha256:cf1f51e2141dc570a2067808627e0b2db9de2518ee7406a7d907f449ed3a9e4c", size = 825070 },
 ]
 
 [[package]]
