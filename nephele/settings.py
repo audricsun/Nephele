@@ -1,6 +1,6 @@
+import sys
 from os import environ
 from pathlib import Path
-import sys
 
 # from nephele.logging import configure_logging
 import django_stubs_ext
@@ -151,12 +151,15 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # CELERY_CACHE_BACKEND = 'default'
 
 # # django setting.
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-#         'LOCATION': 'celery_task_caches',
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "celery_task_caches",
+    },
+    "treenode": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+}
 
 TESTING = "test" in sys.argv
 if DEBUG and not TESTING:
@@ -201,8 +204,59 @@ UNFOLD = {
             },
         },
     },
+    "ENVIRONMENT": "nephele.settings.environment_callback",
     "SIDEBAR": {
         "show_search": True,  # Search in applications and models names
         "show_all_applications": True,
+        # "navigation": [
+        #     {
+        #         "title": _("Navigation"),
+        #         "separator": True,  # Top border
+        #         "collapsible": True,  # Collapsible group of links
+        #         "items": [
+        #             {
+        #                 "title": _("Dashboard"),
+        #                 "icon": "dashboard",
+        #                 "link": reverse_lazy("admin:index"),
+        #                 "badge": "nephele.settings.badge_callback",
+        #                 "permission": lambda request: request.user.is_superuser,
+        #             },
+        #             # {
+        #             #     "title": _("Users"),
+        #             #     "icon": "people",
+        #             #     "link": reverse_lazy("admin:users_user_changelist"),
+        #             # },
+        #         ],
+        #     },
+        # ],
     },
 }
+
+
+def dashboard_callback(request, context):
+    """
+    Callback to prepare custom variables for index template which is used as dashboard
+    template. It can be overridden in application by creating custom admin/index.html.
+    """
+    context.update(
+        {
+            "sample": "example",  # this will be injected into templates/admin/index.html
+        }
+    )
+    return context
+
+
+def environment_callback(request):
+    """
+    Callback has to return a list of two values representing text value and the color
+    type of the label displayed in top right corner.
+    """
+    return ["Develop", "info"]  # info, danger, warning, success
+
+
+def badge_callback(request) -> int:
+    return 3
+
+
+def permission_callback(request):
+    return request.user.has_perm("sample_app.change_model")

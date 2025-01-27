@@ -41,11 +41,11 @@ class Project(Model):
         related_name="projects",
     )  # Many-to-many relationship with User through Membership
 
-    # Generate a slug for the project
+    @property
     def slug(self) -> str:
         if not self.parent:
             return f"/{self.name}"
-        return self.parent.slug() + "/" + self.name
+        return self.parent.slug + "/" + self.name
 
     # Calculate the nested depth of the project
     def nested_depth(self) -> str:
@@ -149,3 +149,7 @@ class ProjectSettings(Model):
 
     def __str__(self):
         return f"Settings<{self.project}>"
+
+    class Meta:
+        verbose_name: str = "ProjectSettings"
+        verbose_name_plural: str = "ProjectSettings"

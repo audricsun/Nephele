@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import User, Group
 
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
@@ -25,8 +24,3 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         "is_superuser",
     )
     list_editable = ("is_active",)
-
-
-@admin.register(Group)
-class GroupAdmin(BaseGroupAdmin, ModelAdmin):
-    pass

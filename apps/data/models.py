@@ -2,7 +2,7 @@ from django.db import models
 from nephele.models import Model
 from itertools import chain
 from apps.cloud.models import Zone
-from apps.storage.models import Quota
+from apps.storage.models import StorageCapacity
 from django.db.models.functions import Concat, Cast
 from django.core.exceptions import ValidationError
 
@@ -49,7 +49,7 @@ class Dataset(Model):
         db_persist=True,
     )
     quota = models.ForeignKey(
-        Quota,
+        StorageCapacity,
         on_delete=models.PROTECT,
         null=False,
         blank=False,

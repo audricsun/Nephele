@@ -34,7 +34,7 @@ class ClusterProvider(Model):
         return f"{self.id}::{self.name}"
 
 
-class Quota(Model):
+class ComputeQuota(Model):
     zone = models.ForeignKey(
         Zone,
         on_delete=models.SET_NULL,
@@ -61,6 +61,8 @@ class Quota(Model):
                 name="unique_if_not_deleted",
             )
         ]
+        verbose_name = "ComputeQuota"
+        verbose_name_plural = "ComputeQuotas"
 
     def clean(self):
         if (
@@ -80,7 +82,7 @@ class TaskQueue(Model):
         max_length=64, unique=True, null=False, blank=False, default="default"
     )
     quota = models.ForeignKey(
-        Quota,
+        ComputeQuota,
         on_delete=models.CASCADE,
         related_name="queues",
         null=False,
@@ -110,6 +112,10 @@ class ReservePlan(Model):
 
     def __str__(self):
         return f"{self.project}::{self.reserve_cpu}::{self.reserve_gpu}::{self.reserve_mem}::{self.reserve_start}::{self.reserve_end}"
+
+    class Meta:
+        verbose_name = "ReservePlan"
+        verbose_name_plural = "ReservePlans"
 
 
 class Node(Model):
@@ -158,3 +164,7 @@ class ZoneCapacityStatic(Model):
         return (
             f"cpu:{self.cpu_capacity} gpu:{self.gpu_capacity} mem:{self.mem_capacity}"
         )
+
+    class Meta:
+        verbose_name = "Static"
+        verbose_name_plural = "Statics"

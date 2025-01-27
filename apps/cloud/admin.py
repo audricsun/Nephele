@@ -3,7 +3,7 @@ from django.db import models
 from .models import (
     ClusterProvider,
     Node,
-    Quota,
+    ComputeQuota,
     ReservePlan,
     Zone,
     TaskQueue,
@@ -70,7 +70,7 @@ class TaskQueueInline(TabularInline):
     extra = 0
 
 
-@admin.register(Quota)
+@admin.register(ComputeQuota)
 class QuotaAdmin(ModelAdmin):
     list_display: list[str] = [
         "id",
