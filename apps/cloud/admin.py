@@ -38,9 +38,9 @@ class ZoneAdmin(ModelAdmin):
 
     def resource_cap(self, obj) -> int:
         return (
-            f"{obj.nodes.aggregate(models.Sum('node_cpu')).get("node_cpu__sum") or 0 }C/"
-            f"{obj.nodes.aggregate(models.Sum('node_mem')).get("node_mem__sum") or 0 }Mem/"
-            f"{obj.nodes.aggregate(models.Sum('node_gpu')).get("node_gpu__sum") or 0 }GPU"
+            f"{obj.nodes.aggregate(models.Sum('node_cpu')).get('node_cpu__sum') or 0}C/"
+            f"{obj.nodes.aggregate(models.Sum('node_mem')).get('node_mem__sum') or 0}Mem/"
+            f"{obj.nodes.aggregate(models.Sum('node_gpu')).get('node_gpu__sum') or 0}GPU"
         )
 
     list_display: list[str] = [

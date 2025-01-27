@@ -187,3 +187,22 @@ if DEBUG and not TESTING:
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": lambda request: True,
     }
+
+UNFOLD = {
+    "SITE_TITLE": "Nephele Admin",
+    "SITE_HEADER": "Nephele Admin",
+    "SITE_URL": "/",
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "fr": "🇫🇷",
+                "nl": "🇧🇪",
+            },
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,  # Search in applications and models names
+        "show_all_applications": True,
+    },
+}
