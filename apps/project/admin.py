@@ -1,33 +1,45 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from .models import Project, Membership, ProjectSettings
-from apps.storage.models import Quota as sQuota
-from apps.cloud.models import Quota as cQuota
+from apps.storage.models import StorageCapacity as sQuota
+from apps.cloud.models import ComputeQuota as cQuota
+from unfold.admin import ModelAdmin
+from unfold.admin import StackedInline, TabularInline
 
 
-class ProjectSettingsInline(admin.StackedInline):
+class ProjectSettingsInline(StackedInline):
     model = ProjectSettings
     can_delete = False
     verbose_name_plural = "settings"
+    tab = True
 
 
-class ProjectMemberInline(admin.TabularInline):
+class ProjectMemberInline(TabularInline):
     model = Membership
     extra = 0
+    # tab = True
 
 
-class StorageQuotaInline(admin.TabularInline):
+class StorageQuotaInline(TabularInline):
     model = sQuota
     extra = 0
+    tab = True
 
 
-class ComputingQuotaInline(admin.TabularInline):
+class ComputingQuotaInline(TabularInline):
     model = cQuota
     extra = 0
+    tab = True
+
+
+def mark_list(input_list: list[str]) -> str:
+    return mark_safe(f"<ul>{''.join([f'<li>{str(m)}</li>' for m in input_list])}</ul>")
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ModelAdmin):
+    """hide some fields in admin"""
+
     def direct_members(self, obj):
         # return ",".join([str(m) for m in obj.direct_membership()])
         return mark_safe(
@@ -41,23 +53,25 @@ class ProjectAdmin(admin.ModelAdmin):
         )
 
     def member_max_roles(self, obj) -> str:
-        return [
-            f"{mr.get('user_name')}<{mr.get('user_id')}>[role={mr.get('max_role')}]"
-            for mr in obj.all_membership_with_max_role()
-        ]
+        return mark_list(
+            [
+                f"{mr.get('user_name')}<{mr.get('user_id')}>[role={mr.get('max_role')}]"
+                for mr in obj.all_membership_with_max_role()
+            ]
+        )
 
     list_display: tuple[str] = (
-        "id",
-        "name",
-        "display_name",
-        "is_active",
         "slug",
-        "nested_depth",
-        "description",
+        # "id",
+        "name",
+        # "display_name",
+        "is_active",
+        # "nested_depth",
+        # "description",
         "parent",
         "member_max_roles",
-        "direct_members",
-        "parent_members",
+        # "direct_members",
+        # "parent_members",
         "updated_at",
         "created_at",
     )
@@ -86,7 +100,6 @@ class ProjectAdmin(admin.ModelAdmin):
         "parent_members",
         "member_max_roles",
     )
-    list_editable = ("display_name",)
     search_fields = [
         "name",
     ]

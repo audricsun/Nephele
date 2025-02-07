@@ -1,7 +1,15 @@
-A django app to archive some of concept design.
+# A django app, for prove of concept
+
+## Background
+
+To test and validate some popular extension/framework for django in a real-world-app.
 
 
-## Available Endpoints
+## Local Environment
+
+```shell
+make compose-up
+```
 
 ### Database (PostgreSQL)
 - **Service Name:** db

@@ -1,3 +1,4 @@
+import sys
 from os import environ
 from pathlib import Path
 
@@ -16,7 +17,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "unfold",  # before django.contrib.admin
+    "unfold.contrib.filters",  # optional, if special filters are needed
+    "unfold.contrib.forms",  # optional, if special form elements are needed
+    "unfold.contrib.inlines",  # optional, if special inlines are needed
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
+    "unfold.contrib.guardian",  # optional, if django-guardian package is used
+    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
+    "django.contrib.admin",  # required
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -143,15 +151,18 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 # CELERY_CACHE_BACKEND = 'default'
 
 # # django setting.
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-#         'LOCATION': 'celery_task_caches',
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "celery_task_caches",
+    },
+    "treenode": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+}
 
-
-if DEBUG:
+TESTING = "test" in sys.argv
+if DEBUG and not TESTING:
     MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ]
@@ -179,3 +190,73 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
         "SHOW_TOOLBAR_CALLBACK": lambda request: True,
     }
+
+UNFOLD = {
+    "SITE_TITLE": "Nephele Admin",
+    "SITE_HEADER": "Nephele Admin",
+    "SITE_URL": "/",
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇬🇧",
+                "fr": "🇫🇷",
+                "nl": "🇧🇪",
+            },
+        },
+    },
+    "ENVIRONMENT": "nephele.settings.environment_callback",
+    "SIDEBAR": {
+        "show_search": True,  # Search in applications and models names
+        "show_all_applications": True,
+        # "navigation": [
+        #     {
+        #         "title": _("Navigation"),
+        #         "separator": True,  # Top border
+        #         "collapsible": True,  # Collapsible group of links
+        #         "items": [
+        #             {
+        #                 "title": _("Dashboard"),
+        #                 "icon": "dashboard",
+        #                 "link": reverse_lazy("admin:index"),
+        #                 "badge": "nephele.settings.badge_callback",
+        #                 "permission": lambda request: request.user.is_superuser,
+        #             },
+        #             # {
+        #             #     "title": _("Users"),
+        #             #     "icon": "people",
+        #             #     "link": reverse_lazy("admin:users_user_changelist"),
+        #             # },
+        #         ],
+        #     },
+        # ],
+    },
+}
+
+
+def dashboard_callback(request, context):
+    """
+    Callback to prepare custom variables for index template which is used as dashboard
+    template. It can be overridden in application by creating custom admin/index.html.
+    """
+    context.update(
+        {
+            "sample": "example",  # this will be injected into templates/admin/index.html
+        }
+    )
+    return context
+
+
+def environment_callback(request):
+    """
+    Callback has to return a list of two values representing text value and the color
+    type of the label displayed in top right corner.
+    """
+    return ["Develop", "info"]  # info, danger, warning, success
+
+
+def badge_callback(request) -> int:
+    return 3
+
+
+def permission_callback(request):
+    return request.user.has_perm("sample_app.change_model")

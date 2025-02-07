@@ -1,3 +1,9 @@
+x-config: &config
+  # (REQUIRED) Replace '?' with '-' followed by a 50 character random string.
+  # You can generate one at https://djecrety.ir/ or by running:
+  #   echo $(cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z0-9' | head -c 50)
+
+
 services:
   nephele:
     build: .
@@ -66,3 +72,18 @@ services:
     ports:
       - 2525:1025
       - 8025:8025
+  mathesar:
+    image: mathesar/mathesar:latest
+    depends_on:
+      - db
+    healthcheck:
+      test: curl -f http://localhost:8000
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    expose:
+      - "8000"
+    # Uncomment the following if not using caddy
+    ports:
+      - 8083:8000

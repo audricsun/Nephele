@@ -7,6 +7,8 @@ from django_lifecycle import LifecycleModelMixin
 from . import signals
 from .managers import SoftDeleteManager
 from django.contrib.auth.models import User
+from treenode.models import TreeNodeModel
+from unfold.admin import ModelAdmin
 
 
 class Timestampable(models.Model):
@@ -17,7 +19,7 @@ class Timestampable(models.Model):
         abstract = True
 
 
-class SoftDeletes(models.Model):
+class SoftDeleteMixin(models.Model):
     # inspired by https://github.com/xgeekshq/django-timestampable/blob/main/timestamps/models.py
     deleted_at = models.DateTimeField(
         null=True, blank=True, editable=False, verbose_name=_("deleted_at")
@@ -60,20 +62,29 @@ class SoftDeletes(models.Model):
         signals.post_restore.send(sender=self.__class__, instance=self)
 
 
-class UuidPk(models.Model):
+class UUIDPkMixin(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
         abstract = True
 
 
-class TrackUserOperation(models.Model):
+class TrackUserOpMixin(models.Model):
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         related_name="%(model_name)s_%(class)s_created_by",
         null=True,
         blank=True,
+        editable=False,
+    )
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="%(model_name)s_%(class)s_updated_by",
+        null=True,
+        blank=True,
+        editable=False,
     )
     deleted_by = models.ForeignKey(
         User,
@@ -81,6 +92,7 @@ class TrackUserOperation(models.Model):
         related_name="%(model_name)s_%(class)s_deleted_by",
         null=True,
         blank=True,
+        editable=False,
     )
 
     class Meta:
@@ -88,12 +100,39 @@ class TrackUserOperation(models.Model):
 
 
 class Model(
-    UuidPk,
+    UUIDPkMixin,
     Timestampable,
-    SoftDeletes,
-    # TrackUserOperation,
+    SoftDeleteMixin,
+    TrackUserOpMixin,
     LifecycleModelMixin,
     models.Model,
 ):
     class Meta:
         abstract = True
+
+
+class TreeNodeModel(Model, TreeNodeModel):
+    class Meta:
+        abstract = True
+
+
+class ModelAdminUpdateBy(ModelAdmin):
+    list_display = [
+        "id",
+        "updated_at",
+        "created_at",
+        "updated_by",
+        "created_by",
+    ]
+    readonly_fields = [
+        "updated_at",
+        "updated_by",
+        "created_at",
+        "created_by",
+    ]
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        return super().save_model(request, obj, form, change)

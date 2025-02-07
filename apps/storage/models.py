@@ -51,8 +51,12 @@ class Class(Model):
     def __str__(self) -> str:
         return f"Storage{self.name}@{self.zone.zone_id}"
 
+    class Meta:
+        verbose_name = "StorageClass"
+        verbose_name_plural = "StorageClasses"
 
-class Quota(Model):
+
+class StorageCapacity(Model):
     owner = models.CharField(
         max_length=255,
         null=True,
@@ -80,6 +84,8 @@ class Quota(Model):
     )
 
     class Meta:
+        verbose_name = "StorageCapacity"
+        verbose_name_plural = "StorageCapacities"
         unique_together: tuple[str] = (
             "provider",
             "project",
